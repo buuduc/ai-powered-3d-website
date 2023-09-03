@@ -36,30 +36,35 @@ const Customizer = () => {
         }
      }
 
-     const handleActiveFilterTab = (tabName) => { 
+     const handleActiveFilterTab = (tabName) => {
         switch (tabName) {
-            case 'logoShirt':
-                state.isLogoTexture = !activeFilterTab[tabName]
-                break;
-            case 'stylishShirt':
-                state.isFullTexture = !activeFilterTab[tabName]
-                break;
-        
-            default:
-                state.isFullTexture = true
-                state.isFullTexture = false
-                break;
+          case "logoShirt":
+              state.isLogoTexture = !activeFilterTab[tabName];
+            break;
+          case "stylishShirt":
+              state.isFullTexture = !activeFilterTab[tabName];
+            break;
+          default:
+            state.isLogoTexture = true;
+            state.isFullTexture = false;
+            break;
         }
+    
+        // after setting the state, activeFilterTab is updated
+    
+        setActiveFilterTab((prevState) => {
+          return {
+            ...prevState,
+            [tabName]: !prevState[tabName]
+          }
+        })
       }
-     const handleDecals = (type, result) => { 
-        console.log('🚀 🚀 file: Customizer.jsx:55 🚀 handleDecals 🚀 type:', type)
-        const decalType = DecalTypes[type]
-        console.log('🚀 🚀 file: Customizer.jsx:57 🚀 handleDecals 🚀 decalType:', decalType)
-        state[decalType.stateProperty] = result
-        console.log('🚀 🚀 file: Customizer.jsx:59 🚀 handleDecals 🚀 state:', state)
-        console.log('🚀 🚀 file: Customizer.jsx:59 🚀 handleDecals 🚀 decalType.stateProperty:', decalType.stateProperty)
-
-        if(!activeFilterTab[decalType.filter]){
+    const handleDecals = (type, result) => {
+        const decalType = DecalTypes[type];
+    
+        state[decalType.stateProperty] = result;
+    
+        if(!activeFilterTab[decalType.filterTab]) {
             handleActiveFilterTab(decalType.filterTab)
         }
       }
@@ -115,8 +120,8 @@ const Customizer = () => {
                                 key={tab.name}
                                 tab={tab}
                                 isFilterTab
-                                isActiveTab=""
-                                handleClick={() => { null }}
+                                isActiveTab={activeFilterTab[tab.name]}
+                                handleClick={() => { handleActiveFilterTab(tab.name) }}
                             />
                         ))}
                     </motion.div>
